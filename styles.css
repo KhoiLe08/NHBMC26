@@ -1,0 +1,219 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #fff;
+    border-bottom: 2px solid #e0e0e0;
+    padding: 40px 20px;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
+.logo-container {
+    flex-shrink: 0;
+}
+
+.school-logo {
+    height: 120px;
+    width: auto;
+}
+
+.school-info {
+    text-align: center;
+}
+
+.school-name {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.school-slogan {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.0;
+    text-align: left;
+}
+
+.school-slogan p {
+    margin: 3px 0;
+}
+
+.banner {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.banner img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+main {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    font-size: 28px;
+    margin-bottom: 40px;
+    text-align: center;
+    color: #222;
+}
+
+.games-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.game-card {
+    display: flex;
+    gap: 30px;
+    background-color: #fff;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.game-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #999;
+}
+
+.game-thumbnail {
+    flex-shrink: 0;
+    width: 32%;
+    min-height: 240px;
+    background-color: #f0f0f0;
+    overflow: hidden;
+}
+
+.game-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.game-info {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.game-info h3 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: #222;
+}
+
+.game-info p {
+    font-size: 15px;
+    color: #555;
+}
+
+/* For 720p screens (1280x720) */
+@media (max-width: 1280px) {
+    .header-content {
+        gap: 30px;
+    }
+
+    .school-logo {
+        height: 100px;
+    }
+
+    .school-name {
+        font-size: 18px;
+    }
+
+    .school-slogan {
+        font-size: 12px;
+    }
+
+    .game-card {
+        gap: 20px;
+    }
+
+    .game-thumbnail {
+        width: 35%;
+        min-height: 210px;
+    }
+
+    .game-info {
+        padding: 20px;
+    }
+
+    .game-info h3 {
+        font-size: 20px;
+    }
+
+    .game-info p {
+        font-size: 14px;
+    }
+}
+
+/* Larger screens (1440p and above) */
+@media (min-width: 1440px) {
+    .header-content {
+        gap: 80px;
+    }
+
+    .school-logo {
+        height: 140px;
+    }
+
+    .school-name {
+        font-size: 22px;
+    }
+
+    .school-slogan {
+        font-size: 14px;
+    }
+
+    .game-card {
+        gap: 40px;
+    }
+
+    .game-thumbnail {
+        width: 30%;
+        min-height: 270px;
+    }
+
+    .game-info h3 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .game-info p {
+        font-size: 16px;
+    }
+}

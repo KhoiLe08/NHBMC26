@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human Benchmark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --val-bg: #0f1923;
+            --val-red: #ff4655;
+            --val-white: #ece8e1;
+            --val-dark-grey: #1f2326;
+            --val-border: rgba(236, 232, 225, 0.2);
+            --font-head: 'Oswald', sans-serif;
+            --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* General Styles & Background Grid */
+        body {
+            margin: 0;
+            font-family: var(--font-body);
+            background-color: var(--val-bg);
+            color: var(--val-white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Techy Grid Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        h1, h2, h3 { 
+            font-family: var(--font-head);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center; 
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        h1 { font-size: 48px; color: var(--val-red); }
+        h2 { font-size: 32px; }
+        p { font-size: 16px; color: #a1a1a1; }
+
+        /* Valorant Style Buttons */
+        button {
+            background-color: var(--val-red);
+            color: var(--val-white);
+            font-family: var(--font-head);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            padding: 15px 40px;
+            font-size: 22px;
+            cursor: pointer;
+            position: relative;
+            /* Cut off the bottom right corner */
+            clip-path: polygon(0 0, 100% 0, 100% 75%, 90% 100%, 0 100%);
+            transition: background-color 0.3s, transform 0.2s;
+            margin: 10px;
+        }
+
+        button:hover { 
+            background-color: #ff5866; 
+            transform: scale(1.05);
+        }
+
+        /* Screen Transitions */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1100px; /* Widened to fit side-by-side layout */
+            margin-top: 50px;
+            flex: 1; /* Allows screens to take up available vertical space */
+        }
+
+        .active-screen { 
+            display: flex; 
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .nav-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .nav-bar button {
+            background-color: transparent;
+            border: 1px solid var(--val-border);
+            clip-path: none;
+            font-size: 16px;
+            padding: 8px 15px;
+        }
+        .nav-bar button:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        /* Home Menu - Glass/Metal Cards */
+        .menu-grid {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .game-card {
+            background-color: var(--val-dark-grey);
+            border: 1px solid var(--val-border);
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            width: 220px;
+            position: relative;
+            transition: all 0.3s ease;
+            /* Angled corner shape */
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+        }
+
+        .game-card:hover { 
+            transform: translateY(-10px); 
+            background-color: #252a2e;
+            border-color: var(--val-red);
+        }
+
+        .game-card h2 { color: var(--val-red); }
+
+        /* Split Layout for Games */
+        .split-layout {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            gap: 50px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .left-pane {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .right-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+
+        /* Tutorial Box Styles */
+        .tutorial-text {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid var(--val-red);
+            padding: 20px 25px;
+            max-width: 400px;
+            text-align: left;
+            color: #a1a1a1;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .tutorial-text strong {
+            color: var(--val-white);
+            font-family: var(--font-head);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 20px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Sequence Memory Styles */
+        .sequence-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .seq-square {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--val-border);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        /* Neon Glow Flash */
+        .seq-square.flash { 
+            background-color: var(--val-red); 
+            border-color: var(--val-red);
+            box-shadow: 0 0 20px var(--val-red);
+            transform: scale(1.05);
+            z-index: 2;
+        }
+
+        #seq-status {
+            font-family: var(--font-head);
+            font-size: 24px;
+            letter-spacing: 2px;
+            height: 30px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* Number Memory Styles */
+        .num-display {
+            font-family: var(--font-head);
+            font-size: 100px;
+            color: var(--val-white);
+            letter-spacing: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .num-input {
+            background-color: transparent;
+            color: var(--val-white);
+            border: none;
+            border-bottom: 3px solid var(--val-red);
+            border-radius: 0;
+            font-family: var(--font-head);
+            font-size: 50px;
+            letter-spacing: 5px;
+            padding: 10px;
+            text-align: center;
+            outline: none;
+            width: 300px;
+            transition: border-color 0.3s;
+        }
+
+        .num-input:focus {
+            border-bottom-color: #ff5866;
+            box-shadow: 0 10px 10px -10px var(--val-red);
+        }
+
+        /* Chimp Test Styles */
+        .chimp-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 60px);
+            grid-template-rows: repeat(5, 60px);
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .chimp-cell {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-head);
+            font-size: 28px;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        .chimp-active {
+            background-color: var(--val-dark-grey);
+            color: var(--val-white);
+            border: 1px solid var(--val-border);
+            cursor: pointer;
+            transition: transform 0.1s, border-color 0.2s;
+        }
+
+        .chimp-active:hover {
+            border-color: var(--val-red);
+            transform: scale(1.1);
+            z-index: 2;
+        }
+
+        .chimp-hidden-text {
+            color: transparent;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-color: transparent;
+        }
+        
+        .chimp-hidden-text:hover {
+            transform: scale(1.1);
+            border-color: var(--val-red);
+        }
+
+        /* Footer Styles */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 0;
+            font-family: var(--font-head);
+            color: rgba(236, 232, 225, 0.4); /* Faded Valorant White */
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+            background: linear-gradient(to top, var(--val-bg) 60%, transparent);
+            z-index: 100;
+            pointer-events: none; /* Lets you click things behind it */
+        }
+
+        /* Added School Logo Styles */
+        .school-logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: auto;
+            filter: brightness(0) invert(1) opacity(0.6);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .school-logo:hover {
+            filter: brightness(0) invert(1) opacity(1) drop-shadow(0 0 8px rgba(236, 232, 225, 0.5));
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <img src="Logo_of_the_Trần_Đại_Nghĩa_High_School_for_the_Gifted.svg.png" alt="TDN Logo" class="school-logo">
+
+    <div class="nav-bar">
+        <button id="home-btn" style="display: none;" onclick="showScreen('home')">← HUB</button>
+    </div>
+
+    <div id="home" class="screen active-screen">
+        <h1>Human Benchmark</h1>
+        <p>Select a test to measure your agent abilities.</p>
+        <div class="menu-grid">
+            <div class="game-card" onclick="initSequence()">
+                <h2>Sequence</h2>
+                <p>Remember an increasingly long pattern of terminal presses.</p>
+            </div>
+            <div class="game-card" onclick="initNumber()">
+                <h2>Numbers</h2>
+                <p>Remember the longest security code you can.</p>
+            </div>
+            <div class="game-card" onclick="initChimp()">
+                <h2>Targets</h2>
+                <p>Track multiple disappearing targets in order.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="sequence" class="screen">
+        <h2>Sequence Memory</h2>
+        <div class="split-layout">
+            <div class="left-pane">
+                <div class="tutorial-text">
+                    <strong>Briefing</strong> 
+                    Memorize the sequence of flashing red squares. When prompted with "Your Turn!", replicate the exact pattern by clicking the terminals. The pattern increases by one node each round.
+                </div>
+            </div>
+            <div class="right-pane">
+                <h3 id="seq-level">Level: 1</h3>
+                <p id="seq-status"></p>
+                <div class="sequence-grid" id="seq-grid"></div>
+                <button id="seq-start-btn" onclick="startSequenceLevel()">Start Protocol</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="number" class="screen">
+        <h2>Number Memory</h2>
+        <div class="split-layout">
+            <div class="left-pane">
+                <div class="tutorial-text">
+                    <strong>Briefing</strong> 
+                    A secure code will flash on your HUD for a brief duration. Memorize the digits. Once the code vanishes, input it exactly to proceed. The code lengthens with each successful bypass.
+                </div>
+            </div>
+            <div class="right-pane">
+                <h3 id="num-level-text">Level: 1</h3>
+                
+                <div id="num-show-area">
+                    <div class="num-display" id="num-display">123</div>
+                    <div id="num-progress-bar" style="height: 5px; background: var(--val-red); width: 100%; transition: linear; box-shadow: 0 0 10px var(--val-red);"></div>
+                </div>
+
+                <div id="num-input-area" style="display: none; text-align: center;">
+                    <p style="font-family: var(--font-head); font-size: 24px; text-transform: uppercase;">Input Security Code:</p>
+                    <input type="number" id="num-input" class="num-input" autocomplete="off"><br><br>
+                    <button onclick="submitNumber()">Submit</button>
+                </div>
+                
+                <button id="num-start-btn" onclick="startNumberLevel()">Start Protocol</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="chimp" class="screen">
+        <h2>Target Tracking</h2>
+        <div class="split-layout">
+            <div class="left-pane">
+                <div class="tutorial-text">
+                    <strong>Briefing</strong> 
+                    Click the highlighted targets in numerical order (1, 2, 3...). The moment you engage target "1", the remaining intel is scrubbed from the UI. Rely on spatial memory to clear the remaining targets in sequence.
+                </div>
+            </div>
+            <div class="right-pane">
+                <h3 id="chimp-score-text">Targets: 4</h3>
+                <button id="chimp-start-btn" onclick="startChimpLevel()">Start Protocol</button>
+                <div class="chimp-grid" id="chimp-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Made by Nguyen Trong Thien An and Bui Huu Nhat Minh 12CTin
+    </div>
+
+    <script>
+        // --- Navigation ---
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active-screen');
+                // Force animation re-trigger by causing a reflow
+                void s.offsetWidth; 
+            });
+            document.getElementById(screenId).classList.add('active-screen');
+            document.getElementById('home-btn').style.display = screenId === 'home' ? 'none' : 'block';
+        }
+
+        // ==========================================
+        // SEQUENCE MEMORY
+        // ==========================================
+        let seq = [];
+        let seqPlayerIndex = 0;
+        let seqLevel = 1;
+        let seqIsShowing = false;
+
+        function initSequence() {
+            showScreen('sequence');
+            document.getElementById('seq-start-btn').style.display = 'block';
+            document.getElementById('seq-grid').style.display = 'none';
+            document.getElementById('seq-level').innerText = "Level: 1";
+            document.getElementById('seq-status').innerText = "";
+            
+            const grid = document.getElementById('seq-grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                let square = document.createElement('div');
+                square.className = 'seq-square';
+                square.id = 'seq-' + i;
+                square.onclick = () => handleSeqClick(i);
+                grid.appendChild(square);
+            }
+        }
+
+        function startSequenceLevel() {
+            seq = [];
+            seqLevel = 1;
+            document.getElementById('seq-start-btn').style.display = 'none';
+            document.getElementById('seq-grid').style.display = 'grid';
+            playSequence();
+        }
+
+        async function playSequence() {
+            seqIsShowing = true;
+            seqPlayerIndex = 0;
+            document.getElementById('seq-level').innerText = "Level: " + seqLevel;
+            
+            const statusText = document.getElementById('seq-status');
+            statusText.innerText = "Memorize...";
+            statusText.style.color = "#ff4655"; // Red warning
+            
+            seq.push(Math.floor(Math.random() * 9));
+            
+            await new Promise(r => setTimeout(r, 600));
+
+            for (let i = 0; i < seq.length; i++) {
+                await flashSquare(seq[i]);
+                if (i < seq.length - 1) {
+                    await new Promise(r => setTimeout(r, 250)); 
+                }
+            }
+            
+            seqIsShowing = false;
+            statusText.innerText = "Your Turn!";
+            statusText.style.color = "#ece8e1"; // White go text
+        }
+
+        function flashSquare(index) {
+            return new Promise(resolve => {
+                const sq = document.getElementById('seq-' + index);
+                sq.classList.add('flash');
+                setTimeout(() => {
+                    sq.classList.remove('flash');
+                    resolve(); 
+                }, 400); 
+            });
+        }
+
+        function handleSeqClick(index) {
+            if (seqIsShowing) return;
+            
+            const sq = document.getElementById('seq-' + index);
+            sq.classList.add('flash');
+            setTimeout(() => sq.classList.remove('flash'), 150);
+
+            if (index === seq[seqPlayerIndex]) { 
+                seqPlayerIndex++;
+                if (seqPlayerIndex === seq.length) {
+                    seqLevel++;
+                    seqIsShowing = true; 
+                    
+                    document.getElementById('seq-status').innerText = "Correct!";
+                    document.getElementById('seq-status').style.color = "#8b978f";
+                    
+                    setTimeout(playSequence, 800);
+                }
+            } else {
+                alert("Protocol Failed! You reached Level " + seqLevel);
+                initSequence();
+            }
+        }
+
+        // ==========================================
+        // NUMBER MEMORY
+        // ==========================================
+        let numLevel = 1;
+        let currentNumber = "";
+
+        function initNumber() {
+            showScreen('number');
+            document.getElementById('num-start-btn').style.display = 'block';
+            document.getElementById('num-show-area').style.display = 'none';
+            document.getElementById('num-input-area').style.display = 'none';
+            document.getElementById('num-level-text').innerText = "Level: 1";
+            numLevel = 1;
+        }
+
+        function startNumberLevel() {
+            document.getElementById('num-start-btn').style.display = 'none';
+            document.getElementById('num-input-area').style.display = 'none';
+            document.getElementById('num-show-area').style.display = 'block';
+            document.getElementById('num-level-text').innerText = "Level: " + numLevel;
+            
+            currentNumber = "";
+            for (let i = 0; i < numLevel; i++) {
+                currentNumber += Math.floor(Math.random() * 10).toString();
+            }
+            if (currentNumber[0] === '0') currentNumber = '1' + currentNumber.substring(1);
+            
+            document.getElementById('num-display').innerText = currentNumber;
+
+            let displayTime = 1500 + (numLevel * 500);
+            
+            const bar = document.getElementById('num-progress-bar');
+            bar.style.transition = 'none';
+            bar.style.width = '100%';
+            setTimeout(() => {
+                bar.style.transition = `width ${displayTime}ms linear`;
+                bar.style.width = '0%';
+            }, 50);
+
+            setTimeout(() => {
+                document.getElementById('num-show-area').style.display = 'none';
+                document.getElementById('num-input-area').style.display = 'block';
+                document.getElementById('num-input').value = "";
+                document.getElementById('num-input').focus();
+            }, displayTime);
+        }
+
+        function submitNumber() {
+            const answer = document.getElementById('num-input').value;
+            if (answer === currentNumber) {
+                numLevel++;
+                startNumberLevel();
+            } else {
+                alert(`Protocol Failed! \nCode was: ${currentNumber}\nYou entered: ${answer}\nLevel reached: ${numLevel}`);
+                initNumber();
+            }
+        }
+
+        document.getElementById('num-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') submitNumber();
+        });
+
+        // ==========================================
+        // CHIMP TEST
+        // ==========================================
+        let chimpLevel = 4;
+        let chimpStep = 1;
+
+        function initChimp() {
+            showScreen('chimp');
+            chimpLevel = 4;
+            document.getElementById('chimp-score-text').innerText = "Targets: 4";
+            document.getElementById('chimp-start-btn').style.display = 'block';
+            document.getElementById('chimp-grid').innerHTML = '';
+        }
+
+        function startChimpLevel() {
+            chimpStep = 1;
+            document.getElementById('chimp-start-btn').style.display = 'none';
+            document.getElementById('chimp-score-text').innerText = "Targets: " + chimpLevel;
+            
+            const grid = document.getElementById('chimp-grid');
+            grid.innerHTML = '';
+            
+            let slots = Array.from({length: 40}, (_, i) => i);
+            slots.sort(() => Math.random() - 0.5);
+            let activeSlots = slots.slice(0, chimpLevel);
+
+            for (let i = 0; i < 40; i++) {
+                let cell = document.createElement('div');
+                cell.className = 'chimp-cell';
+                
+                let numIndex = activeSlots.indexOf(i);
+                if (numIndex !== -1) {
+                    let number = numIndex + 1;
+                    cell.innerText = number;
+                    cell.dataset.number = number;
+                    cell.classList.add('chimp-active');
+                    cell.onclick = () => handleChimpClick(cell, number);
+                }
+                grid.appendChild(cell);
+            }
+        }
+
+        function handleChimpClick(cell, number) {
+            if (!cell.classList.contains('chimp-active')) return;
+
+            if (number === chimpStep) {
+                cell.classList.remove('chimp-active');
+                cell.innerText = '';
+                cell.style.border = "none";
+                cell.style.backgroundColor = "transparent";
+
+                if (chimpStep === 1) {
+                    document.querySelectorAll('.chimp-active').forEach(c => {
+                        c.classList.add('chimp-hidden-text');
+                    });
+                }
+
+                chimpStep++;
+
+                if (chimpStep > chimpLevel) {
+                    chimpLevel++;
+                    setTimeout(startChimpLevel, 500);
+                }
+            } else {
+                alert("Protocol Failed! Score: " + chimpLevel);
+                initChimp();
+            }
+        }
+    </script>
+</body>
+</html>
